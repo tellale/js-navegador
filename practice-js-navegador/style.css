@@ -1,0 +1,32 @@
+h1, h2, h3, p, label, button {
+    font-family: "Calibre","Inter","San Francisco","SF Pro Text",-apple-system,system-ui,sans-serif;
+}
+
+h1 {
+    font-size: 20px;
+    font-weight: bolder;
+    text-align: center;
+}
+
+h2 {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 0.5rem;
+}
+
+h3 {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 0.5rem;
+}
+
+p, label{
+    font-size: 14px;
+}
+
+body{
+    margin: 0 auto;
+    min-width: 360px;
+    max-width: 500px;
+    margin-top: 2rem;
+}

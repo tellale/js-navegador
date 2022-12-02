@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expenses Control</title>
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Expenses Control</h1>
+
+    <section>
+        <h2>YOUR SAVINGS</h2>
+        <div>
+            <h3 id="income">INCOME</h3>
+            <h3>EXPENSES</h3>
+        </div>
+    </section>
+
+    <section>
+        <h2>History</h2>
+        <hr>
+    </section>
+
+    <section>
+        <h2>Add new transaction</h2>
+        <hr>
+        <form novalidate id="addNewTransaction" >
+            <label for="">Concept</label>
+            <input type="text" name="concept" id="concept">
+            <label for="">Amount (Negativ - expense | Positiv - income</label>
+            <input type="number" name="cantidad" id="amount">
+            <button type="submit">Add transaction</button>
+        </form>
+    </section>
+    <script src="./index.js"></script>
+</body>
+</html>
