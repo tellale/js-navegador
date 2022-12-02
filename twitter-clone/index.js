@@ -1,42 +1,48 @@
-// Creation of tweet
-// DONE - form to get input from tweet. Name and message
-// Crear un boton con el texto 'Create Tweet' que cuando se pulse ovtenga los datos del form y 
-//los imprima por consola como si fuera un objeto
-// una vez el boton se haya pulsado limpiaremos los datos del form. 
+// Creation of tweet -> from form
 
 const createTweetFromElement = document.querySelector('#createTweetForm')
 
-createTweetFromElement.addEventListener('submit', (event) => {
+createTweetFromElement.addEventListener('submit', async (event) => {
     event.preventDefault();
     const nameTweet = document.querySelector('#userName');
     const textTweet = document.querySelector('#tweetMessage');
 
     let obj = {
-        name: nameTweet.value,
+        author: nameTweet.value,
         message: textTweet.value,
+        image: 'https://i.pinimg.com/474x/4c/c2/3e/4cc23e28035d3bef286c29139319c044--twitter-icon-icons.jpg',
     }
-    console.log(obj);
+
+    const response = await fetch('https://kc-fake-tweets-api.onrender.com/posts', {
+        method: 'POST',
+        body: JSON.stringify(obj),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+
+    const createdTweet = await response.json();
 
     nameTweet.value = '';
     textTweet.value = '';
 
+    fetchTweets(createdTweet)
+
 })
 
-// 2 Listado de tweets
-// Pintar en pantalla los tweets wue obtenemos, tenemos que pintar ese tweet en pantalla mostrando:
-// autor, mensaje, numero de likes y numero de comentarios
+// 2 Listado de tweets-> Pintar listado de tweets from api
 
 const tweetListElement = document.querySelector('.tweetList');
 
-
-async function fetchTweets() {
+async function fetchTweets(tweet) {
     const response = await fetch('https://kc-fake-tweets-api.onrender.com/posts');
     const tweets = await response.json();
+    tweetListElement.innerHTML = '';
 
     tweets.forEach((tweet) => {
         const tweetElement = document.createElement('article');
         tweetElement.innerHTML = `
-        <p>Autor: ${tweet.autor}</p>
+        <p>Autor: ${tweet.author}</p>
         <p>${tweet.message}</p>
         <p>${tweet.likes.length} likes y ${tweet.comments.length} comentarios</p>
         `;
