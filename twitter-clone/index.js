@@ -1,5 +1,4 @@
-// Creation of tweet -> from form
-
+// Creates a tweet from form
 const createTweetFromElement = document.querySelector('#createTweetForm')
 const tweetListElement = document.querySelector('.tweetList');
 
@@ -31,6 +30,7 @@ createTweetFromElement.addEventListener('submit', async (event) => {
 
 })
 
+// Generates comments in HTML to add to DOM
 function generateTweetCommentsHTML(comments) {
     let HTLMResult = ''
 
@@ -45,13 +45,34 @@ function generateTweetCommentsHTML(comments) {
     return HTLMResult
 }
 
+// Asks for confirmation and deletes tweets if confirmed
+async function deleteTweet(tweetId) {
+    console.log(tweetId);
+
+    const removeConfirmation = window.confirm('Estas seguro de borrar el tweet?')
+
+    if (removeConfirmation) {
+        await fetch(`https://kc-fake-tweets-api.onrender.com/posts/${tweetId}`, {
+            method: 'DELETE',
+        })
+    
+        const tweetElement = document.getElementById(tweetId);
+        tweetElement.remove();
+    }
+
+}
+
+// Draws tweet with all elements
 function drawTweet(tweet) {
     const tweetElement = document.createElement('article');
+
+    tweetElement.setAttribute('id', tweet.id)
 
     let tweetContent = `
     <p>Autor: ${tweet.author}</p>
     <p>${tweet.message}</p>
     <p>${tweet.likes.length} likes y ${tweet.comments.length} comentarios</p>
+    <button onclick = 'deleteTweet(${tweet.id})'>Delete Tweet</button>
     `;
 
     if (tweet.comments.length > 0) {
@@ -68,9 +89,7 @@ function drawTweet(tweet) {
     tweetListElement.prepend(tweetElement)
 }
 
-
-// 2 Listado de tweets-> Pintar listado de tweets from api
-
+// Fetch tweets from API and calls drawTweet
 async function fetchTweets() {
     const response = await fetch('https://kc-fake-tweets-api.onrender.com/posts');
     const tweets = await response.json();
