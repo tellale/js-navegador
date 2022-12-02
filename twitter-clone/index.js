@@ -1,6 +1,7 @@
 // Creation of tweet -> from form
 
 const createTweetFromElement = document.querySelector('#createTweetForm')
+const tweetListElement = document.querySelector('.tweetList');
 
 createTweetFromElement.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -26,28 +27,58 @@ createTweetFromElement.addEventListener('submit', async (event) => {
     nameTweet.value = '';
     textTweet.value = '';
 
-    fetchTweets(createdTweet)
+    drawTweet(createdTweet)
 
 })
 
+function generateTweetCommentsHTML(comments) {
+    let HTLMResult = ''
+
+    comments.forEach(comment => {
+        HTLMResult = HTLMResult + `
+        <li>
+            <p>Autor: ${comment.author}</p>
+            <p>${comment.message}</p>
+        </li>
+        `
+    })
+    return HTLMResult
+}
+
+function drawTweet(tweet) {
+    const tweetElement = document.createElement('article');
+
+    let tweetContent = `
+    <p>Autor: ${tweet.author}</p>
+    <p>${tweet.message}</p>
+    <p>${tweet.likes.length} likes y ${tweet.comments.length} comentarios</p>
+    `;
+
+    if (tweet.comments.length > 0) {
+        const tweetComments = generateTweetCommentsHTML(tweet.comments);
+        tweetContent = tweetContent + `
+        <hr>
+        <p> Comentarios </p>
+        <ul> ${tweetComments}</ul>
+        `;
+    }
+
+    tweetElement.innerHTML = tweetContent
+
+    tweetListElement.prepend(tweetElement)
+}
+
+
 // 2 Listado de tweets-> Pintar listado de tweets from api
 
-const tweetListElement = document.querySelector('.tweetList');
-
-async function fetchTweets(tweet) {
+async function fetchTweets() {
     const response = await fetch('https://kc-fake-tweets-api.onrender.com/posts');
     const tweets = await response.json();
     tweetListElement.innerHTML = '';
 
     tweets.forEach((tweet) => {
-        const tweetElement = document.createElement('article');
-        tweetElement.innerHTML = `
-        <p>Autor: ${tweet.author}</p>
-        <p>${tweet.message}</p>
-        <p>${tweet.likes.length} likes y ${tweet.comments.length} comentarios</p>
-        `;
-
-        tweetListElement.appendChild(tweetElement)
+        drawTweet(tweet)
     })
+
 }
 fetchTweets()
