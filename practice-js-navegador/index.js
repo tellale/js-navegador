@@ -11,9 +11,15 @@ const incomeList = document.querySelector('#income-box')
 const expensesList = document.querySelector('#expenses-box')
 const transactionRecords = document.querySelector('#history-records')
 let entryList = []
-let currentIncome = 0
-let currentExpenses = 0
-let currentSavings = 0
+let currentIncome = JSON.parse(localStorage.getItem('storageIncome'));
+drawIncome(currentIncome)
+let currentExpenses = JSON.parse(localStorage.getItem('storageExpenses'));
+drawExpenses(currentExpenses)
+let currentSavings = JSON.parse(localStorage.getItem('storageSavings'));
+drawSavings(currentSavings)
+let incomeResult 
+let expensesResult
+let savingsResult
 
 // When submit form saves thes concept and amount in an obj and push it to localStorage into a list.
 // Triggers historyRecords at the end
@@ -22,7 +28,7 @@ newTransactionFromElement.addEventListener('submit', (event) => {
 
     const conceptElement = document.querySelector('#concept');
     const amountElement = document.querySelector('#amount');
-    const max = 100
+    const max = 1000
 
     let transaction = {
         concept: conceptElement.value,
@@ -39,46 +45,92 @@ newTransactionFromElement.addEventListener('submit', (event) => {
 
     historyRecords(transaction);
     sumIncomeExpenses(transaction);
-    sumSavings(currentIncome, currentExpenses);
+    //sumSavings(incomeResult, expensesResult)
 })
 
 // takes a transaction. If amount is + will add to currentIncome and display under Income box. If - will add to current Expenses and display under Expenses box.
 function sumIncomeExpenses(transaction) {
-    const incomeElement = document.querySelector('#incomeElement')
-    const expensesElement = document.querySelector('#expensesElement')
     
     if (transaction.amount > 0) {
-        let incomeResult = currentIncome + parseFloat(transaction.amount)
+        incomeResult = currentIncome + parseFloat(transaction.amount)
         currentIncome = incomeResult
+        let storageIncome = incomeResult
+        localStorage.setItem('storageIncome', JSON.stringify(storageIncome))
 
-        let displayIncome = `
-        <p>${incomeResult}€</p>
-        `
-        incomeElement.innerHTML = displayIncome;
-        incomeList.appendChild(incomeElement);
+        savingsResult = currentSavings + parseFloat(transaction.amount)
+        let storageSavings = savingsResult
+        currentSavings = savingsResult
+        localStorage.setItem('storageSavings', JSON.stringify(storageSavings))
+
+        drawIncome(incomeResult)
+
     } else {
-        let expensesResult = currentExpenses + (-parseFloat(transaction.amount))
+        expensesResult = currentExpenses + (-parseFloat(transaction.amount))
+        let storageExpenses = expensesResult
         currentExpenses = expensesResult
+        localStorage.setItem('storageExpenses', JSON.stringify(storageExpenses))
 
-        let displayExpenses = `
-        <p>${expensesResult}€</p>
-        `
-        expensesElement.innerHTML = displayExpenses;
-        expensesList.appendChild(expensesElement);
-        
+        savingsResult = currentSavings + parseFloat(transaction.amount)
+        storageSavings = savingsResult
+        localStorage.setItem('storageSavings', JSON.stringify(storageSavings))
+
+        drawExpenses(expensesResult)
+
     }
+    drawSavings(savingsResult)
 }
 
-// Takes total income and expenses; calculates and displays total savings
-function sumSavings(income, expenses) {
+function drawSavings(savings) {
     const savingsElement = document.querySelector('#savingsElement')
-    let savingsResult = income - expenses
+    let displaySavings
 
-    let displaySavings = `
-    <p>${savingsResult}€</p>
-    `
+    if (savings !== null) {
+        displaySavings = `
+        <p>${savings}€</p>
+        `
+    } else {
+        displaySavings = `
+        <p>0.00€</p>
+        `
+    }
     savingsElement.innerHTML = displaySavings;
     savingsList.appendChild(savingsElement);
+}
+
+function drawIncome(income) {
+    const incomeElement = document.querySelector('#incomeElement')
+    let displayIncome
+
+    if (income !== null) {
+        displayIncome = `
+        <p>${income}€</p>
+        `
+    } else {
+        displayIncome = `
+        <p>0.00€</p>
+        ` 
+    }
+
+    incomeElement.innerHTML = displayIncome;
+    incomeList.appendChild(incomeElement);
+
+}
+
+function drawExpenses(expenses) {
+    const expensesElement = document.querySelector('#expensesElement')
+    let displayExpenses 
+    
+    if (expenses !== null) {
+        displayExpenses = `
+        <p>${expenses}€</p>
+        `
+    } else {
+        displayExpenses = `
+        <p>0.00€</p>
+        `
+    }
+    expensesElement.innerHTML = displayExpenses;
+    expensesList.appendChild(expensesElement);
 }
 
 // Takes a transaction as an argument, creates a 'li' and adds it to the 'ul' on the history section
@@ -147,3 +199,5 @@ function deleteTransactionFromIncomeExpensesSavings(amount) {
     savingsElement.innerHTML = displaySavings;
     savingsList.appendChild(savingsElement);
 }
+
+//localStorage.clear()
