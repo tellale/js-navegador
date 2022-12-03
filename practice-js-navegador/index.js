@@ -162,6 +162,7 @@ function deleteTransactionFromHistory(id, amount) {
         const transactionElement = document.getElementById(id);
         transactionElement.remove();
         deleteTransactionFromIncomeExpensesSavings(amount)
+
     }
 }
 
@@ -173,6 +174,8 @@ function deleteTransactionFromIncomeExpensesSavings(amount) {
     if (amount > 0) {
         let incomeResult = currentIncome - amount
         currentIncome = incomeResult
+        storageIncome = incomeResult
+        localStorage.setItem('storageIncome', JSON.stringify(storageIncome))
 
         let displayIncome = `
         <p>${incomeResult}€</p>
@@ -182,6 +185,8 @@ function deleteTransactionFromIncomeExpensesSavings(amount) {
     } else {
         let expensesResult = currentExpenses - (-amount)
         currentExpenses = expensesResult
+        storageExpenses = expensesResult
+        localStorage.setItem('storageExpenses', JSON.stringify(storageExpenses))
 
         let displayExpenses = `
         <p>${expensesResult}€</p>
@@ -192,12 +197,10 @@ function deleteTransactionFromIncomeExpensesSavings(amount) {
 
     const savingsElement = document.querySelector('#savingsElement')
     let savingsResult = currentSavings - amount
+    storageSavings = savingsResult
+    localStorage.setItem('storageSavings', JSON.stringify(storageSavings))
 
-    let displaySavings = `
-    <p>${savingsResult}€</p>
-    `
-    savingsElement.innerHTML = displaySavings;
-    savingsList.appendChild(savingsElement);
+    drawSavings(savingsResult)
 }
 
 //localStorage.clear()
