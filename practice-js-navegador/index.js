@@ -5,15 +5,13 @@
 // Requisitos opcionales
 // Si cerramos la web y volvemos a entrar, tenemos que recuperar todos los gastos e ingresos que habíamos introducido, así como el ahorro total.
 
-
-// Add new transaction
-// DONE create event on click
-// save in localstorage concept and amount
-// delete from screen
-
 const newTransactionFromElement = document.querySelector('#addNewTransaction')
 const incomeList = document.querySelector('#income')
+const transactionRecords = document.querySelector('#history-records')
+let entryList = []
 
+// When submit form saves thes concept and amount in an obj and push it to localStorage into a list.
+// Triggers historyRecords at the end
 newTransactionFromElement.addEventListener('submit', (event) => {
     event.preventDefault();
 
@@ -22,28 +20,36 @@ newTransactionFromElement.addEventListener('submit', (event) => {
 
     let transaction = {
         concept: conceptElement.value,
-        amount: amountElement.value,
+        amount: parseFloat(amountElement.value),
     }
+    entryList.push(transaction)
 
-    sumIncomeExpenses(transaction.amount)
-    console.log(transaction)
-
-    localStorage.setItem('newTransaction', transaction);
+    localStorage.setItem('transactionHistory', JSON.stringify(entryList));
     
 
     conceptElement.value = '';
     amountElement.value = '';
+
+    historyRecords(transaction);
 })
 
 // get amount added
 // if positive sum with current income
 // if negative sum it with current expenses
 
-function sumIncomeExpenses(amount){
 
+// Takes a transaction as an argument, creates a 'li' and adds it to the 'ul' on the history section
+function historyRecords(transaction) {
+    const historyElement = document.createElement('li');
 
-    if (amount > 0) {
-    } else {
-        totalExpenses += amount
-    }
+    let transactionElement = `
+    <div class="transactionElement">
+        <p>${transaction.concept}</p>
+        <p>${transaction.amount}</p>
+    </div>
+    `
+
+    historyElement.innerHTML = transactionElement;
+
+    transactionRecords.appendChild(historyElement);
 }

@@ -11,20 +11,30 @@
 <body>
     <h1>Expenses Control</h1>
 
-    <section>
+    <section id="savings-box">
         <h2>YOUR SAVINGS</h2>
-        <div>
-            <h3 id="income">INCOME</h3>
+        <p>EUR</p>
+    </section>
+
+    <section id="income-expenses-box">
+        <div id="income">
+            <h3>INCOME</h3>
+        </div>
+        <div id="expenses">
             <h3>EXPENSES</h3>
         </div>
     </section>
 
-    <section>
+    <section id="history-box">
         <h2>History</h2>
         <hr>
+        <div>
+            <ul id="history-records">
+            </ul>
+        </div>
     </section>
 
-    <section>
+    <section id="new-transaction-box">
         <h2>Add new transaction</h2>
         <hr>
         <form novalidate id="addNewTransaction" >
