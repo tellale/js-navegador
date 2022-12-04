@@ -16,8 +16,7 @@ let currentSavedSavings
 setUpScreenNumbers()
 setUpHistory()
 
-// When submit form saves thes concept and amount in an obj and push it to localStorage into a list.
-// Triggers historyRecords at the end
+// Main addTransaction button event
 newTransactionFromElement.addEventListener('submit', (event) => {
     event.preventDefault();
 
@@ -39,7 +38,6 @@ newTransactionFromElement.addEventListener('submit', (event) => {
 
     historyRecords(transaction);
     sumIncomeExpenses(transaction.amount);
-    //sumSavings(incomeResult, expensesResult)
 })
 
 // Set up screen with info from localStorage
@@ -106,7 +104,7 @@ function sumIncomeExpenses(amount) {
 
 }
 
-
+// Drawing functions
 function drawSavings(savings) {
     const savingsElement = document.querySelector('#savingsElement')
     let displaySavings
@@ -169,7 +167,7 @@ function historyRecords(transaction) {
     <div class="transactionElement">
         <p>${transaction.concept}</p>
         <p>${transaction.amount}</p>
-        <button onclick = 'deleteTransactionFromHistory(${transaction.id}, ${transaction.amount})'>Delete Transaction</button>
+        <button class='delete-button' onclick = 'deleteTransactionFromHistory(${transaction.id}, ${transaction.amount})'><img class='delete-icon' src='./delete.png' /></button>
     </div>
     `
 

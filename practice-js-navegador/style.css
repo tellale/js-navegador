@@ -21,7 +21,7 @@ h3 {
 }
 
 p, label{
-    font-size: 14px;
+    font-size: 15px;
 }
 
 body{
@@ -29,4 +29,90 @@ body{
     min-width: 360px;
     max-width: 500px;
     margin-top: 2rem;
+}
+
+#savings-box {
+    text-align: center;
+    padding: 2rem;
+}
+
+#income-expenses-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    text-align: center;
+    padding: 1rem;
+    border: solid 1px lightgrey;
+    margin: 0 3rem;
+    box-shadow: 0px 0px 3px 1px lightgray;
+}
+
+#savings-box p {
+    color: #77DD78;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#incomeElement {
+    color: #77DD78;
+    font-weight: bold;
+}
+
+#expensesElement {
+    color: #FF6962;
+    font-weight: bold;
+}
+
+#history-box #new-transaction-box {
+    padding: 1rem;
+}
+
+.transactionElement {
+    display: flex;
+    justify-content: space-between;
+    border: solid 1px lightgrey;
+    padding: 0.8rem;
+    text-align: center;
+
+}
+
+#addNewTransaction {
+    display: grid;
+}
+
+#concept, #amount {
+    padding: 0.3rem;
+    margin: 10px 0;
+}
+
+.add-transaction-button {
+    background-color: #CAB9E3;
+    border: solid 1px #CAB9E3;
+    color: #000;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 1rem;
+}
+
+.add-transaction-button:hover {
+    background-color: #815ec2;
+    border: solid 1px #815ec2;
+    color: white;
+}
+
+.delete-button {
+    background-color: white;
+    border: none;
+}
+
+.delete-button:hover{
+    border: solid 1px lightgrey;
+}
+
+.delete-icon {
+    width: 15px;
+    align-items: center;
+    padding: 1px;
 }
