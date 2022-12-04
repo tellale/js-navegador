@@ -1,25 +1,20 @@
-// Requisitos indispensables
-// La aplicación deberá mostrar en todo momento el total de gastos, ingresos y el dinero total que tenemos ahorrado.
-// Podremos añadir un ingreso o un gasto incluyendo un concepto.
-// Podremos borrar cualquier gasto o ingreso que hayamos introducido.
-// Requisitos opcionales
-// Si cerramos la web y volvemos a entrar, tenemos que recuperar todos los gastos e ingresos que habíamos introducido, así como el ahorro total.
-
+// Needed variables
 const newTransactionFromElement = document.querySelector('#addNewTransaction')
 const savingsList = document.querySelector('#savings-box')
 const incomeList = document.querySelector('#income-box')
 const expensesList = document.querySelector('#expenses-box')
 const transactionRecords = document.querySelector('#history-records')
 let entryList = []
-let currentIncome = JSON.parse(localStorage.getItem('storageIncome'));
-drawIncome(currentIncome)
-let currentExpenses = JSON.parse(localStorage.getItem('storageExpenses'));
-drawExpenses(currentExpenses)
-let currentSavings = JSON.parse(localStorage.getItem('storageSavings'));
-drawSavings(currentSavings)
 let incomeResult 
 let expensesResult
 let savingsResult
+let currentSavedIncome
+let currentSavedExpenses
+let currentSavedSavings
+
+
+setUpScreenNumbers()
+setUpHistory()
 
 // When submit form saves thes concept and amount in an obj and push it to localStorage into a list.
 // Triggers historyRecords at the end
@@ -37,48 +32,80 @@ newTransactionFromElement.addEventListener('submit', (event) => {
     }
     entryList.push(transaction)
 
-    localStorage.setItem('transactionHistory', JSON.stringify(entryList));
-    
+    localStorage.setItem('storageTransactionHistory', JSON.stringify(entryList));
 
     conceptElement.value = '';
     amountElement.value = '';
 
     historyRecords(transaction);
-    sumIncomeExpenses(transaction);
+    sumIncomeExpenses(transaction.amount);
     //sumSavings(incomeResult, expensesResult)
 })
 
-// takes a transaction. If amount is + will add to currentIncome and display under Income box. If - will add to current Expenses and display under Expenses box.
-function sumIncomeExpenses(transaction) {
-    
-    if (transaction.amount > 0) {
-        incomeResult = currentIncome + parseFloat(transaction.amount)
-        currentIncome = incomeResult
-        let storageIncome = incomeResult
-        localStorage.setItem('storageIncome', JSON.stringify(storageIncome))
+// Set up screen with info from localStorage
+function setUpScreenNumbers(){
+    currentSavedIncome = JSON.parse(localStorage.getItem('storageIncome'));
+    drawIncome(currentSavedIncome)
 
-        savingsResult = currentSavings + parseFloat(transaction.amount)
-        let storageSavings = savingsResult
-        currentSavings = savingsResult
-        localStorage.setItem('storageSavings', JSON.stringify(storageSavings))
+    currentSavedExpenses = JSON.parse(localStorage.getItem('storageExpenses'));
+    drawExpenses(currentSavedExpenses)
 
-        drawIncome(incomeResult)
-
-    } else {
-        expensesResult = currentExpenses + (-parseFloat(transaction.amount))
-        let storageExpenses = expensesResult
-        currentExpenses = expensesResult
-        localStorage.setItem('storageExpenses', JSON.stringify(storageExpenses))
-
-        savingsResult = currentSavings + parseFloat(transaction.amount)
-        storageSavings = savingsResult
-        localStorage.setItem('storageSavings', JSON.stringify(storageSavings))
-
-        drawExpenses(expensesResult)
-
-    }
-    drawSavings(savingsResult)
+    currentSavedSavings = JSON.parse(localStorage.getItem('storageSavings'));
+    drawSavings(currentSavedSavings)
 }
+
+function setUpHistory() {
+    let transactionSavedHistory = JSON.parse(localStorage.getItem('storageTransactionHistory'));
+    console.log(transactionSavedHistory)
+
+    if (transactionSavedHistory !== null) {
+        for (let i = 0; i < transactionSavedHistory.length; i++) {
+            historyRecords(transactionSavedHistory[i]);
+            entryList.push(transactionSavedHistory[i])
+        }
+    }
+    
+}
+
+function localStorageManagement(income, expenses, savings) {
+    // Income localStorage
+    let storageIncome = income
+    localStorage.setItem('storageIncome', JSON.stringify(storageIncome))
+
+    // Expenses localStorage
+    let storageExpenses = expenses
+    localStorage.setItem('storageExpenses', JSON.stringify(storageExpenses))
+    
+    // Savings localStorage
+    let storageSavings = savings
+    localStorage.setItem('storageSavings', JSON.stringify(storageSavings))
+
+}
+
+// takes a transaction. If amount is + will add to currentIncome and display under Income box. If - will add to current Expenses and display under Expenses box.
+function sumIncomeExpenses(amount) {
+    
+    if (amount > 0) {
+        incomeResult = currentSavedIncome + parseFloat(amount)
+        currentSavedIncome = incomeResult
+        drawIncome(currentSavedIncome)
+
+        savingsResult = currentSavedSavings + parseFloat(amount)
+        currentSavedSavings = savingsResult
+    } else {
+        expensesResult = currentSavedExpenses + (-parseFloat(amount))
+        currentSavedExpenses = expensesResult
+        drawExpenses(currentSavedExpenses)
+
+        savingsResult = currentSavedSavings + parseFloat(amount)
+        currentSavedSavings = savingsResult
+    }
+
+    localStorageManagement(currentSavedIncome, currentSavedExpenses, currentSavedSavings)
+    drawSavings(currentSavedSavings)
+
+}
+
 
 function drawSavings(savings) {
     const savingsElement = document.querySelector('#savingsElement')
@@ -110,7 +137,6 @@ function drawIncome(income) {
         <p>0.00€</p>
         ` 
     }
-
     incomeElement.innerHTML = displayIncome;
     incomeList.appendChild(incomeElement);
 
@@ -161,46 +187,41 @@ function deleteTransactionFromHistory(id, amount) {
     if (removeConfirmation) {
         const transactionElement = document.getElementById(id);
         transactionElement.remove();
-        deleteTransactionFromIncomeExpensesSavings(amount)
-
+        deleteTransactionFromIncomeExpensesSavings(amount);
+        deleteFromStorage(id);
     }
+}
+
+// Deletes entries from localStorage
+function deleteFromStorage(id) {
+    for (let i = 0; i < entryList.length; i++) {
+        if(entryList[i].id == id) {
+            entryList.splice(i, 1);
+            break;
+        }
+    }
+    localStorage.setItem('storageTransactionHistory', JSON.stringify(entryList));
 }
 
 // Deletes transacion amount from income, expenses or savings when transaction history is ereased. 
 function deleteTransactionFromIncomeExpensesSavings(amount) {
-    const incomeElement = document.querySelector('#incomeElement')
-    const expensesElement = document.querySelector('#expensesElement')
     
     if (amount > 0) {
-        let incomeResult = currentIncome - amount
-        currentIncome = incomeResult
-        storageIncome = incomeResult
-        localStorage.setItem('storageIncome', JSON.stringify(storageIncome))
+        let incomeResult = currentSavedIncome - amount
+        currentSavedIncome = incomeResult
 
-        let displayIncome = `
-        <p>${incomeResult}€</p>
-        `
-        incomeElement.innerHTML = displayIncome;
-        incomeList.appendChild(incomeElement);
+        drawIncome(incomeResult)
+
     } else {
-        let expensesResult = currentExpenses - (-amount)
-        currentExpenses = expensesResult
-        storageExpenses = expensesResult
-        localStorage.setItem('storageExpenses', JSON.stringify(storageExpenses))
+        let expensesResult = currentSavedExpenses - (-amount)
+        currentSavedExpenses = expensesResult
 
-        let displayExpenses = `
-        <p>${expensesResult}€</p>
-        `
-        expensesElement.innerHTML = displayExpenses;
-        expensesList.appendChild(expensesElement);
+        drawExpenses(expensesResult)
     }
 
-    const savingsElement = document.querySelector('#savingsElement')
-    let savingsResult = currentSavings - amount
-    storageSavings = savingsResult
-    localStorage.setItem('storageSavings', JSON.stringify(storageSavings))
+    let savingsResult = currentSavedSavings - amount
+    currentSavedSavings = savingsResult
 
     drawSavings(savingsResult)
+    localStorageManagement(currentSavedIncome, currentSavedExpenses, currentSavedSavings)
 }
-
-//localStorage.clear()
