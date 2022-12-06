@@ -40,10 +40,10 @@
         <h2>Add new transaction</h2>
         <hr>
         <form novalidate id="addNewTransaction" >
-            <label for="">Concept</label>
-            <input type="text" name="concept" id="concept">
-            <label for="">Amount (Use negative (-) numbers for expenses or positive number for income)</label>
-            <input type="number" name="cantidad" id="amount">
+            <label for="concept" class="conceptLabel">Concept</label>
+            <input type="text" name="concept" id="concept" placeholder="Name of your income/expense">
+            <label for="number" class="amountLabel">Amount</label>
+            <input type="number" name="cantidad" id="amount" placeholder="Use negative (-) numbers for expenses or positive number for income">
             <button type="submit" class="add-transaction-button">Add transaction</button>
         </form>
     </section>

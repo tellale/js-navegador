@@ -12,7 +12,7 @@ let currentSavedIncome
 let currentSavedExpenses
 let currentSavedSavings
 
-
+// Initializing app
 setUpScreenNumbers()
 setUpHistory()
 
@@ -39,6 +39,7 @@ newTransactionFromElement.addEventListener('submit', (event) => {
     historyRecords(transaction);
     sumIncomeExpenses(transaction.amount);
 })
+
 
 // Set up screen with info from localStorage
 function setUpScreenNumbers(){
@@ -110,12 +111,18 @@ function drawSavings(savings) {
     let displaySavings
 
     if (savings !== null) {
-        displaySavings = `
-        <p>${savings}€</p>
-        `
+        if (savings >= 0) {
+            displaySavings = `
+            <p class="displaySavingsGreen">${savings}€</p>
+            `
+        } else {
+            displaySavings = `
+            <p class="displaySavingsRed">${savings}€</p>
+            `
+        }  
     } else {
         displaySavings = `
-        <p>0.00€</p>
+        <p class="displaySavingsGreen">0.00€</p>
         `
     }
     savingsElement.innerHTML = displaySavings;
@@ -163,13 +170,23 @@ function historyRecords(transaction) {
 
     historyElement.setAttribute('id', transaction.id)
 
-    let transactionElement = `
-    <div class="transactionElement">
-        <p>${transaction.concept}</p>
-        <p>${transaction.amount}</p>
-        <button class='delete-button' onclick = 'deleteTransactionFromHistory(${transaction.id}, ${transaction.amount})'><img class='delete-icon' src='./delete.png' /></button>
-    </div>
-    `
+    let transactionElement
+    if (transaction.amount > 0){
+        transactionElement = `
+        <div class="transactionElementGreen">
+            <p class="transactionConcept">${transaction.concept}</p>
+            <p class="transactionAmountGreen">${transaction.amount}€</p>
+            <button class='delete-button' onclick = 'deleteTransactionFromHistory(${transaction.id}, ${transaction.amount})'><img class='delete-icon' src='./delete.png' /></button>
+        </div> `
+    } else {
+        transactionElement = `
+        <div class="transactionElementRed">
+            <p class="transactionConcept">${transaction.concept}</p>
+            <p class="transactionAmountRed">${transaction.amount}€</p>
+            <button class='delete-button' onclick = 'deleteTransactionFromHistory(${transaction.id}, ${transaction.amount})'><img class='delete-icon' src='./delete.png' /></button>
+        </div> `
+    }
+    
 
     historyElement.innerHTML = transactionElement;
 

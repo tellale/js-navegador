@@ -1,4 +1,4 @@
-h1, h2, h3, p, label, button {
+h1, h2, h3, p, label, button, input {
     font-family: "Calibre","Inter","San Francisco","SF Pro Text",-apple-system,system-ui,sans-serif;
 }
 
@@ -20,7 +20,7 @@ h3 {
     padding: 0.5rem;
 }
 
-p, label{
+p {
     font-size: 15px;
 }
 
@@ -49,7 +49,6 @@ body{
 }
 
 #savings-box p {
-    color: #77DD78;
     font-size: 20px;
     font-weight: bold;
 }
@@ -68,13 +67,44 @@ body{
     padding: 1rem;
 }
 
-.transactionElement {
+.transactionElementRed {
     display: flex;
     justify-content: space-between;
-    border: solid 1px lightgrey;
+    border: solid #FF6962;
+    border-width: 0 1px 1px 5px;
     padding: 0.8rem;
     text-align: center;
+}
 
+.transactionElementGreen {
+    display: flex;
+    justify-content: space-between;
+    border: solid #77DD78;
+    border-width: 0 1px 1px 5px;
+    padding: 0.8rem;
+    text-align: center;
+}
+
+.transactionAmountGreen{
+    font-weight: bold;
+    color: #77DD78;
+}
+
+.displaySavingsGreen {
+    color: #77DD78;
+}
+
+.transactionAmountRed {
+    font-weight: bold;
+    color: #FF6962;
+}
+
+.displaySavingsRed {
+    color: #FF6962;
+}
+
+.transactionConcept {
+    font-weight: bold;
 }
 
 #addNewTransaction {
@@ -87,13 +117,12 @@ body{
 }
 
 .add-transaction-button {
-    background-color: #CAB9E3;
-    border: solid 1px #CAB9E3;
+    background-color: #b296db;
+    border: solid 1px #b296db;
     color: #000;
     font-size: 16px;
     font-weight: bold;
     padding: 10px;
-    border-radius: 1rem;
 }
 
 .add-transaction-button:hover {
@@ -102,10 +131,12 @@ body{
     color: white;
 }
 
+
 .delete-button {
     background-color: white;
     border: none;
 }
+
 
 .delete-button:hover{
     border: solid 1px lightgrey;
@@ -115,4 +146,8 @@ body{
     width: 15px;
     align-items: center;
     padding: 1px;
+}
+
+.conceptLabel, .amountLabel{
+    padding: 5px;
 }
